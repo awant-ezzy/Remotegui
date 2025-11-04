@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+    <link rel="stylesheet" type="text/css" href="styles.css">
 <head>
     <title>Mikrotik Remote Manager</title>
 </head>
