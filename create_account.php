@@ -1,9 +1,7 @@
 <?php
 require_once('RouterosAPI.php');
-
-$mikrotik_ip = '192.168.11.248';
-$mikrotik_username = 'admin';
-$mikrotik_password = 'password'; // Ganti dengan password yang aman
+require_once('config.php');
+require_once('database.php');
 
 $username = $_POST['username'];
 $password = $_POST['password'];
@@ -14,11 +12,17 @@ $api->debug = false;
 
 if ($api->connect($mikrotik_ip, 8728, $mikrotik_username, $mikrotik_password)) {
 
+    // Validasi port (opsional)
+    if ($port < 1 || $port > 65535) {
+        echo "Error: Port harus antara 1 dan 65535.";
+        exit;
+    }
+
     // 1. Add User
     $api->comm("/user/add", array(
         "name" => $username,
         "password" => $password,
-        "group" => "read" // Sesuaikan dengan kebutuhan
+        "group" => $default_group
     ));
 
     // 2. Add Firewall Rule (Filter)
@@ -26,7 +30,7 @@ if ($api->connect($mikrotik_ip, 8728, $mikrotik_username, $mikrotik_password)) {
         "chain" => "input",
         "protocol" => "tcp",
         "dst-port" => $port,
-        "src-address" => "0.0.0.0/0", // Atau batasi ke IP tertentu
+        "src-address" => $allowed_src_address,
         "action" => "accept",
         "comment" => "Allow remote for " . $username
     ));
@@ -37,15 +41,24 @@ if ($api->connect($mikrotik_ip, 8728, $mikrotik_username, $mikrotik_password)) {
         "protocol" => "tcp",
         "dst-port" => $port,
         "action" => "dst-nat",
-        "to-addresses" => "192.168.11.248", // IP Mikrotik
+        "to-addresses" => $mikrotik_ip, // IP Mikrotik
         "to-ports" => $port,
         "comment" => "NAT for remote " . $username
     ));
 
     $api->disconnect();
-    echo "Account " . $username . " created successfully!";
+
+    // 4. Tambahkan ke database
+    $db_result = addAccountToDatabase($username, $password, $port);
+    if ($db_result === true) {
+        echo "Account " . $username . " created successfully!";
+    } else {
+        echo "Account " . $username . " created on Mikrotik, but failed to add to database: " . $db_result;
+    }
 
 } else {
     echo "Connection to Mikrotik failed.";
 }
+
+closeDatabaseConnection(); // Tutup koneksi database
 ?>
