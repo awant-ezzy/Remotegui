@@ -1,41 +1,73 @@
 body {
     font-family: sans-serif;
-    background-color: #f0f0f0;
+    /* Background Gradient Violet */
+    background: linear-gradient(to right, #4A148C, #7B1FA2, #9C27B0);
+    color: white; /* Warna teks agar kontras dengan background */
+    margin: 0; /* Menghilangkan margin default body */
+    padding: 0; /* Menghilangkan padding default body */
+    min-height: 100vh; /* Memastikan gradient menutupi seluruh tinggi layar */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 30px;
+    color: white;
 }
 
 .form-container {
-    background-color: #fff;
-    padding: 20px;
+    background-color: rgba(255, 255, 255, 0.1); /* Latar belakang semi-transparan */
+    padding: 30px;
     margin-bottom: 20px;
-    border-radius: 5px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    width: 400px; /* Lebar form container */
+    max-width: 90%; /* Lebar maksimum agar responsif */
+    box-sizing: border-box; /* Memastikan padding tidak mempengaruhi lebar */
+    backdrop-filter: blur(5px); /* Efek blur untuk latar belakang */
 }
 
 label {
     display: block;
-    margin-bottom: 5px;
+    margin-bottom: 8px;
+    color: white;
+    font-weight: bold;
 }
 
 input[type="text"],
 input[type="password"],
 input[type="number"] {
     width: 100%;
-    padding: 8px;
-    margin-bottom: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    box-sizing: border-box; /* Penting agar padding tidak mempengaruhi lebar */
+    padding: 12px;
+    margin-bottom: 20px;
+    border: none;
+    border-radius: 5px;
+    box-sizing: border-box;
+    background-color: rgba(255, 255, 255, 0.8); /* Latar belakang input */
+    color: #333; /* Warna teks input */
 }
 
 button {
-    background-color: #4CAF50;
+    background-color: #673AB7;
     color: white;
-    padding: 10px 20px;
+    padding: 14px 25px;
     border: none;
-    border-radius: 4px;
+    border-radius: 5px;
     cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease; /* Efek transisi hover */
 }
 
 button:hover {
-    background-color: #3e8e41;
+    background-color: #512DA8;
+}
+
+/* Responsif untuk layar kecil */
+@media (max-width: 600px) {
+    .form-container {
+        padding: 20px;
+    }
 }
