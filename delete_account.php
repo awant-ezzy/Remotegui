@@ -1,9 +1,7 @@
 <?php
 require_once('RouterosAPI.php');
-
-$mikrotik_ip = '192.168.11.248';
-$mikrotik_username = 'admin';
-$mikrotik_password = 'password'; // Ganti dengan password yang aman
+require_once('config.php');
+require_once('database.php');
 
 $username = $_POST['username'];
 
@@ -31,9 +29,18 @@ if ($api->connect($mikrotik_ip, 8728, $mikrotik_username, $mikrotik_password)) {
     }
 
     $api->disconnect();
-    echo "Account " . $username . " deleted successfully!";
+
+    // 4. Hapus dari database
+    $db_result = deleteAccountFromDatabase($username);
+    if ($db_result === true) {
+        echo "Account " . $username . " deleted successfully!";
+    } else {
+        echo "Account " . $username . " deleted on Mikrotik, but failed to delete from database: " . $db_result;
+    }
 
 } else {
     echo "Connection to Mikrotik failed.";
 }
+
+closeDatabaseConnection(); // Tutup koneksi database
 ?>
