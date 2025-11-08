@@ -21,5 +21,5 @@ src/
 
     Langkah Instalasinya
 
-    cd /home/z/Remotegui
+    cd /home/Remotegui
      git init
